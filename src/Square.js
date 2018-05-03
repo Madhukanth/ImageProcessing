@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Draggable from "react-draggable";
-import { Row, Col, Button, Input } from "react-materialize";
+import { Row, Col, Button, Input, Chip } from "react-materialize";
 import Modal from "react-modal";
 
 //Styles for Modal
@@ -24,6 +24,7 @@ var colorIndex;
 var height;
 var width;
 var color;
+var label;
 
 //Square Component
 class Square extends Component {
@@ -76,9 +77,11 @@ class Main extends Component {
     super(props);
     this.state = {
       squares: [<Square pos={1} />],
+      labels: [],
       deleteModalIsOpen: false,
       colorModalIsOpen: false,
-      resizeModalIsOpen: false
+      resizeModalIsOpen: false,
+      labelModalIsOpen: false
     };
   }
 
@@ -138,6 +141,17 @@ class Main extends Component {
     );
   };
 
+  label = text => {
+    this.state.labels.push(
+      <Draggable>
+        <div>
+          <Chip>{text}</Chip>
+        </div>
+      </Draggable>
+    );
+    this.setState(this.state);
+  };
+
   // closedeleteModal,closecolorModal,closeresizeModal for closing the Modal
   closedeleteModal = () => {
     this.setState({
@@ -157,14 +171,16 @@ class Main extends Component {
     });
   };
 
+  closeLabelModal = () => {
+    this.setState({ labelModalIsOpen: false });
+  };
+
   render() {
     return (
       <div>
         {/* Navigation bar */}
-
         {/* Add,delete,resize and recolor buttons */}
-
-        <Row style={{ marginBottom: 70 }}>
+        <Row style={{ marginBottom: 40 }}>
           <Col s={3}>
             <Button
               style={{ marginLeft: -150, marginBottom: 30 }}
@@ -202,7 +218,6 @@ class Main extends Component {
             </Button>
           </Col>
         </Row>
-
         {/* Modal for delete,resize and recolor */}
         {/* Delete Modal */}
         <Modal
@@ -227,7 +242,6 @@ class Main extends Component {
             Delete
           </Button>
         </Modal>
-
         {/* Recolor Modal  */}
         <Modal
           isOpen={this.state.colorModalIsOpen}
@@ -258,7 +272,6 @@ class Main extends Component {
             Recolor
           </Button>
         </Modal>
-
         {/* Resize Modal */}
         <Modal
           isOpen={this.state.resizeModalIsOpen}
@@ -296,16 +309,44 @@ class Main extends Component {
             Resize
           </Button>
         </Modal>
-
+        <Modal
+          isOpen={this.state.labelModalIsOpen}
+          onRequestClose={this.closeLabelModal}
+          style={customStyles}
+          contentLabel="Example Modal"
+        >
+          <Input
+            s={12}
+            label="Label"
+            onChange={event => {
+              label = event.target.value;
+            }}
+          />
+          <Button
+            onClick={() => {
+              this.closeLabelModal();
+              this.label(label);
+            }}
+          >
+            Add Label
+          </Button>
+        </Modal>
         {/* Row which shows the all the squares in the state */}
-
         <Row>
           {this.state.squares.map((sq, i) => (
             <Col key={i} s={1} style={{ marginRight: 20 }}>
               {sq}
             </Col>
           ))}
+          <div>{this.state.labels.map(lb => lb)}</div>
         </Row>
+
+        <Button
+          style={{ marginLeft: -400, marginBottom: -60 }}
+          onClick={() => this.setState({ labelModalIsOpen: true })}
+        >
+          Add Label
+        </Button>
       </div>
     );
   }

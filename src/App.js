@@ -4,8 +4,8 @@ import { Carousel } from "react-bootstrap";
 import Main from "./Square";
 
 class DemoCarousel extends Component {
-  handleSelect = (index, e) => {
-    console.log(index, e);
+  state = {
+    label: []
   };
 
   render() {
@@ -17,7 +17,7 @@ class DemoCarousel extends Component {
         />
         <center>
           <div style={{ marginTop: 100, width: 650 }}>
-            <Carousel onSelect={this.handleSelect} interval={null}>
+            <Carousel interval={null}>
               <Carousel.Item>
                 <img
                   style={{ width: 650, height: 400 }}
